@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using AirlineAPI.Models;
 
 namespace AirlineAPI.Data
 {
@@ -9,5 +10,7 @@ namespace AirlineAPI.Data
 			: base(options)
 		{
 		}
+		public DbSet<Airline> Airlines { get; set; }
+		public DbSet<AircraftType> AircraftTypes { get; set;}
 	}
 }
