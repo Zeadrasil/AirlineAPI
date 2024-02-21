@@ -1,18 +1,32 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.welcome-container {
+    display: flex;
+    justify-content: center;
+}
+
+.welcome-image {
+    max-width: 85%;
+    border-radius: 8px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
