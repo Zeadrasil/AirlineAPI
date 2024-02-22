@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-AirlineAPI-e602a987-ca46-4309-a05b-cb6e2718702a</UserSecretsId>
+    <UserSecretsId>aspnet-AirlineAPI-2874d3ea-a780-4fe0-9dc1-f654be4d6ed3</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
