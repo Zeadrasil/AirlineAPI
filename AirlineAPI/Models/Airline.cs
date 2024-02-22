@@ -7,7 +7,7 @@ namespace AirlineAPI.Models
 		[Required]
 		[MaxLength(255)]
 		public string Title { get; set; }
-		[Required]
+		[Key]
 		[MinLength(2)]
 		[MaxLength(3)]
 		public string IATACode { get; set; }
@@ -30,14 +30,11 @@ namespace AirlineAPI.Models
 		[Range(0, float.MaxValue)]
 		public float FleetAge { get; set; }
 		[Required]
-		public DateOnly Founded { get; set; }
+		public DateTime Founded { get; set; }
 		[Required]
 		[StringLength(2)]
 		public string CountryISO { get; set; }
-		[Key]
-		public int ID { get; set; }
-
-		public Airline(string title, string iATACode, string iATAAccounting, string iCAOCode, string callsign, string type, string status, int fleetSize, float fleetAge, DateOnly founded, string countryISO, int iD)
+		public Airline(string title, string iATACode, string iATAAccounting, string iCAOCode, string callsign, string type, string status, int fleetSize, float fleetAge, DateTime founded, string countryISO)
 		{
 			Title = title;
 			IATACode = iATACode;
@@ -50,7 +47,6 @@ namespace AirlineAPI.Models
 			FleetAge = fleetAge;
 			Founded = founded;
 			CountryISO = countryISO;
-			ID = iD;
 		}
 
 		public Airline() { }

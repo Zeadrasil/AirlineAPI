@@ -13,5 +13,14 @@ namespace AirlineAPI.Models
 		public string AircraftTypeID { get; set; }
 		[Key]
 		public string PlaneTypeID { get; set; }
+
+		public AircraftType() { }
+		public AircraftType(string name, string iATACode, string aircraftTypeID, string planeTypeID)
+		{
+			Name = name;
+			IATACode = iATACode;
+			AircraftTypeID = aircraftTypeID;
+			PlaneTypeID = planeTypeID;
+		}
 	}
 }

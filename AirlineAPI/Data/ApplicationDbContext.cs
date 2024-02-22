@@ -12,5 +12,8 @@ namespace AirlineAPI.Data
 		}
 		public DbSet<Airline> Airlines { get; set; }
 		public DbSet<AircraftType> AircraftTypes { get; set;}
+		public DbSet<Airplane> Airplanes { get; set; }
+		public DbSet<Airport> Airports { get; set; }
+		public DbSet<Flight> Flights { get; set; }
 	}
 }
