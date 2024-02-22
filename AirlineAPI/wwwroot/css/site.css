@@ -16,6 +16,12 @@ html {
     border-radius: 8px;
 }
 
+.index-question {
+    text-align: center;
+    margin: 5px;
+    font-size: large;
+}
+
 @media (min-width: 768px) {
     html {
         font-size: 16px;
