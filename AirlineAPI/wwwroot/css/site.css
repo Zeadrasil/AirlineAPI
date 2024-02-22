@@ -1,18 +1,67 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.welcome-container {
+    display: flex;
+    justify-content: center;
+}
+
+.welcome-image {
+    max-width: 85%;
+    border-radius: 8px;
+}
+
+.index-question {
+    text-align: center;
+    margin: 5px;
+    font-size: xx-large;
+    color: #00A3FF;
+}
+
+.about-container {
+    text-align: center;
+    margin: 5px;
+    font-size: large;
+}
+
+.destination-btn {
+    display: inline-block;
+    position: relative;
+    margin: 10px;
+}
+
+.destination-btn img {
+    width: 150px;
+    height: auto;
+}
+
+.destination-text {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #158CBA;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }

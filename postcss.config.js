@@ -1,2 +1,6 @@
-
-// ignore this
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
