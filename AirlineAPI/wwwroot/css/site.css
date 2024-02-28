@@ -51,6 +51,17 @@ html {
     border-radius: 5px;
 }
 
+.destination-section {
+    text-align: center;
+}
+
+    .destination-section img {
+        /* width: 125px; */
+        max-width: 85%;
+        height: auto;
+        border: groove;
+    }
+
 @media (min-width: 768px) {
     html {
         font-size: 16px;
