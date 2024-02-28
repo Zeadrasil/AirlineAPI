@@ -55,7 +55,7 @@ namespace AirlineAPI.Data
 
 		private static List<Flight> parseFlight(string json)
 		{
-			JObject details = JObject.Parse(File.ReadAllText("C:\\Users\\dgriffith\\Videos\\bruh.txt"));
+			JObject details = JObject.Parse(json);
 			List<Flight> flights = new List<Flight>();
 			foreach (var stuff in details["data"])
 			{
@@ -78,5 +78,99 @@ namespace AirlineAPI.Data
 			return flights;
 		}
 
+		private static List<Airport> parseAirport(string json)
+		{
+			JObject details = JObject.Parse(json);
+			List<Airport> airports = new List<Airport>();
+			foreach(var stuff in details["data"])
+			{
+				Airport airport = new Airport();
+				airport.IATACode = stuff["iata_code"].ToString();
+				airport.Latitude = float.Parse(stuff["latitude"].ToString());
+				airport.Longitude = float.Parse(stuff["longitude"].ToString());
+				airport.GMTOffset = float.Parse(stuff["gmt"].ToString());
+				airport.CountryISO = stuff["country_iso2"].ToString();
+				airport.CityIATA = stuff["city_iata_code"].ToString();
+				airports.Add(airport);
+			}
+			return airports;
+		}
+
+		private static List<Airline> parseAirline(string json)
+		{
+			JObject details = JObject.Parse(json);
+			List<Airline> airlines = new List<Airline>();
+			foreach(var stuff in details["data"])
+			{
+				Airline airline = new Airline();
+				airline.Title = stuff["airline_name"].ToString();
+				airline.IATACode = stuff["iata_code"].ToString();
+				airline.ICAOCode = stuff["icao_code"].ToString();
+				airline.IATAAccounting = stuff["iata_prefix_accounting"].ToString();
+				airline.Callsign = stuff["callsign"].ToString();
+				airline.FleetSize = int.Parse(stuff["fleet_size"].ToString());
+				airline.FleetAge = float.Parse(stuff["fleet_average_age"].ToString());
+				try
+				{
+					airline.Founded = DateTime.Parse(stuff["date_founded"].ToString());
+				}
+				catch
+				{
+					airline.Founded = new DateTime();
+					airline.Founded = airline.Founded.AddYears(int.Parse(stuff["date_founded"].ToString()) - 1);
+				}
+				airline.CountryISO = stuff["country_iso2"].ToString();
+				airlines.Add(airline);
+			}
+			return airlines;
+		}
+
+		private static List<Airplane> parseAirplane(string json)
+		{
+			JObject details = JObject.Parse(json);
+			List<Airplane> airplanes = new List<Airplane>();
+			foreach (var stuff in details["data"])
+			{
+				Airplane airplane = new Airplane();
+				airplane.RegistrationCode = stuff["registration_number"].ToString();
+				airplane.ProductionLine = stuff["production_line"].ToString();
+				airplane.ModelName = stuff["model_name"].ToString();
+				airplane.ModelCode = stuff["model_code"].ToString();
+				airplane.ICAOHex = stuff["icao_code_hex"].ToString();
+				airplane.ShortIATACode = stuff["iata_code_short"].ToString();
+				airplane.ConstructionID = stuff["construction_number"].ToString();
+				airplane.TestNumber = stuff["test_registration_number"].ToString();
+				airplane.RolloutDate = DateTime.TryParse(stuff["rollout_date"].ToString(), out DateTime datetime) ? datetime : null;
+				airplane.FirstFlight = DateTime.TryParse(stuff["first_flight_date"].ToString(), out datetime) ? datetime : null;
+				airplane.DeliveryDate = DateTime.TryParse(stuff["delivery_date"].ToString(), out datetime) ? datetime : null;
+				airplane.RegistrationDate = DateTime.TryParse(stuff["registration_date"].ToString(), out datetime) ? datetime : DateOnly.TryParse(stuff["registration_date"].ToString(), out DateOnly date) ? date.ToDateTime(new TimeOnly()) : getDateTimeFromString(stuff["registration_date"].ToString());
+				airplane.OwnerIATACode = stuff["airline_iata_code"].ToString();
+				airplane.EngineCount = int.Parse(stuff["engines_count"].ToString());
+				airplane.EngineType = stuff["engines_type"].ToString();
+				airplane.Age = float.Parse(stuff["plane_age"].ToString());
+				airplane.Status = stuff["plane_status"].ToString();
+				airplane.ClassData = stuff["plane_class"].ToString();
+				airplanes.Add(airplane);
+			}
+			return airplanes;
+		}
+
+		private static DateTime getDateTimeFromString(string str)
+		{
+			DateTime dt = new DateTime();
+			if (int.Parse(str.Substring(0, 4)) > 0)
+			{
+				dt.AddYears(int.Parse(str.Substring(0, 4)) - 1);
+			}
+			if (int.Parse(str.Substring(5, 2)) > 0)
+			{
+				dt.AddMonths(int.Parse(str.Substring(5, 2)) - 1);
+			}
+			if (int.Parse(str.Substring(8, 2)) > 0)
+			{
+				dt.AddDays(int.Parse(str.Substring(8, 2)) - 1);
+			}
+			return dt;
+		}
 	}
 }
