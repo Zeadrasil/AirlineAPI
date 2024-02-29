@@ -155,7 +155,24 @@ namespace AirlineAPI.Data
 			return airplanes;
 		}
 
-		private static DateTime getDateTimeFromString(string str)
+        private static List<AircraftType> parseAircraftType(string json)
+        {
+			JObject details = JObject.Parse(json);
+			List<AircraftType> aircraftTypes = new List<AircraftType>();
+			foreach (var stuff in details["data"])
+			{
+				AircraftType aircraftType = new AircraftType();
+				aircraftType.Name = stuff["name"].ToString();
+				aircraftType.IATACode = stuff["iata_code"].ToString();
+				aircraftType.AircraftTypeID = stuff["aircraf_type_id"].ToString();
+				aircraftType.PlaneTypeID = stuff["plane_type_id"].ToString();
+				aircraftTypes.Add(aircraftType);
+			}
+
+			return aircraftTypes;
+        }
+
+        private static DateTime getDateTimeFromString(string str)
 		{
 			DateTime dt = new DateTime();
 			if (int.Parse(str.Substring(0, 4)) > 0)
