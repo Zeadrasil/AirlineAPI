@@ -15,24 +15,24 @@ namespace AirlineAPI.Models
 		[Required]
 		public string ModelCode { get; set; }
 		[Required]
-		public int ICAOHex { get; set; }
+		public string ICAOHex { get; set; }
 		[Required]
 		[StringLength(3)]
 		public string ShortIATACode { get; set; }
 		[Required]
-		public string ConstructionID { get; set; }
+		public string? ConstructionID { get; set; }
 		[Required]
 		[MinLength(2)]
 		[MaxLength(6)]
-		public string TestNumber { get; set; }
+		public string? TestNumber { get; set; }
 		[Required]
-		public DateTime RolloutDate { get; set; }
+		public DateTime? RolloutDate { get; set; }
 		[Required]
-		public DateTime FirstFlight {  get; set; }
+		public DateTime? FirstFlight {  get; set; }
 		[Required]
-		public DateTime DeliveryDate { get; set; }
+		public DateTime? DeliveryDate { get; set; }
 		[Required]
-		public DateTime RegistrationDate { get; set; }
+		public DateTime? RegistrationDate { get; set; }
 		[Required]
 		[MinLength(2)]
 		[MaxLength(3)]
@@ -48,10 +48,10 @@ namespace AirlineAPI.Models
 		[Required]
 		public string Status { get; set; }
 		[Required]
-		public string ClassData { get; set; }
+		public string? ClassData { get; set; }
 
 		public Airplane() { }
-		public Airplane(string registrationCode, string productionLine, string modelName, string modelCode, int iCAOHex, string shortIATACode, string constructionID, string testNumber, DateTime rolloutDate, DateTime firstFlight, DateTime deliveryDate, DateTime registrationDate, string ownerIATACode, int engineCount, string engineType, float age, string status, string classData)
+		public Airplane(string registrationCode, string productionLine, string modelName, string modelCode, string iCAOHex, string shortIATACode, string constructionID, string testNumber, DateTime rolloutDate, DateTime firstFlight, DateTime deliveryDate, DateTime registrationDate, string ownerIATACode, int engineCount, string engineType, float age, string status, string classData)
 		{
 			RegistrationCode = registrationCode;
 			ProductionLine = productionLine;
