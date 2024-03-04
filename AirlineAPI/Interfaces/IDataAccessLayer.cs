@@ -1,15 +1,20 @@
 ﻿using AirlineAPI.Models;
+
 namespace AirlineAPI.Interfaces
 {
     public interface IDataAccessLayer
     {
-        IEnumerable<Flight> GetMovies();
+        List<Airline> GetFlight();
 
-        void AddFlight(Flight Flight);
-        void RemoveFlight(int? id);
 
-        Flight? GetFlight(int? id);
 
-        //void UpdateFlight(Flight Flight);
+        void AddFlight(Airline airline);
+
+        void CancelFlight(string? Title);
+
+        Airline? GetFlight(string? Title);
+
+        IEnumerable<Airline> FilterAirlines(string? title, string? countryiso);
+        
     }
 }
