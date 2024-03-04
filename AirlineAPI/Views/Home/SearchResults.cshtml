@@ -1,0 +1,7 @@
+﻿@model List<Flight>
+
+<h1>Flights Found:</h1>
+@foreach(Flight flight in Model)
+{
+	<partial name="_FlightPartialView.cshtml" for="@flight"/>
+}

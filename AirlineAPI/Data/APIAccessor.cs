@@ -1,4 +1,5 @@
-﻿using AirlineAPI.Models;
+﻿using AirlineAPI.Controllers;
+using AirlineAPI.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -143,7 +144,7 @@ namespace AirlineAPI.Data
 				airplane.RolloutDate = DateTime.TryParse(stuff["rollout_date"].ToString(), out DateTime datetime) ? datetime : null;
 				airplane.FirstFlight = DateTime.TryParse(stuff["first_flight_date"].ToString(), out datetime) ? datetime : null;
 				airplane.DeliveryDate = DateTime.TryParse(stuff["delivery_date"].ToString(), out datetime) ? datetime : null;
-				airplane.RegistrationDate = DateTime.TryParse(stuff["registration_date"].ToString(), out datetime) ? datetime : DateOnly.TryParse(stuff["registration_date"].ToString(), out DateOnly date) ? date.ToDateTime(new TimeOnly()) : getDateTimeFromString(stuff["registration_date"].ToString());
+				airplane.RegistrationDate = DateTime.TryParse(stuff["registration_date"].ToString(), out datetime) ? datetime : DateOnly.TryParse(stuff["registration_date"].ToString(), out DateOnly date) ? date.ToDateTime(new TimeOnly()) : Helpers.getDateTimeFromString(stuff["registration_date"].ToString());
 				airplane.OwnerIATACode = stuff["airline_iata_code"].ToString();
 				airplane.EngineCount = int.Parse(stuff["engines_count"].ToString());
 				airplane.EngineType = stuff["engines_type"].ToString();
@@ -172,22 +173,5 @@ namespace AirlineAPI.Data
 			return aircraftTypes;
         }
 
-        private static DateTime getDateTimeFromString(string str)
-		{
-			DateTime dt = new DateTime();
-			if (int.Parse(str.Substring(0, 4)) > 0)
-			{
-				dt.AddYears(int.Parse(str.Substring(0, 4)) - 1);
-			}
-			if (int.Parse(str.Substring(5, 2)) > 0)
-			{
-				dt.AddMonths(int.Parse(str.Substring(5, 2)) - 1);
-			}
-			if (int.Parse(str.Substring(8, 2)) > 0)
-			{
-				dt.AddDays(int.Parse(str.Substring(8, 2)) - 1);
-			}
-			return dt;
-		}
 	}
 }
