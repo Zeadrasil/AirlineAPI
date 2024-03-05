@@ -69,14 +69,14 @@ namespace AirlineAPI.Controllers
             }
             return View("ReservedFlight", dal.GetFlight().Where(x => x.Title));
         }
-        public IActionResult CancelFlight(string? Title)
+        public IActionResult CancelFlight(int? id)
         {
-            dal.CancelFlight(Title);
+            dal.RemoveFlight(id);
             TempData["success"] = "Flight removed!";
             return RedirectToAction("ReservedFlight", "Flight");
 
         }
-
+        
 
 
 

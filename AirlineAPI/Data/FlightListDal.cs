@@ -14,14 +14,6 @@ namespace AirlineAPI.Data
         {
             db = indb;
         }
-        //private static List<Movie> MovieList = new List<Movie>
-        //{
-        //    new Movie("The Holiday", 2006, 5f, ""),
-        //    new Movie("Don't Look Up", 2021, 4.8f, ""),
-        //    new Movie("Star Wars", 1977, 5.0f, ""),
-        //    new Movie("Tombstone", 1993, 4.8f,
-        //        "https://assets.vg247.com/current/2019/02/apex_legends_main_art_2.jpg"),
-        //};
 
         public void AddFlight(Airline airline)
         {
@@ -54,14 +46,6 @@ namespace AirlineAPI.Data
             }
         }
 
-        //public void UpdateMovie(Flight Flight)
-        //{
-        //    //Movie? foundMovie = GetMovie(movie.Id);
-        //    //int i = MovieList.FindIndex(x => x.Id == movie.Id);
-        //    //MovieList[i] = movie;
-        //    db.Flights.Update(flight);
-        //    db.SaveChanges();
-        //}
 
         public List<Airline> FilterFlights(string? title, string? countryiso)
         {
