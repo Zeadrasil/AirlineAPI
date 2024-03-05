@@ -1,4 +1,5 @@
 using AirlineAPI.Data;
+using AirlineAPI.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +20,7 @@ namespace AirlineAPI
 			builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 			builder.Services.AddControllersWithViews();
-
+			builder.Services.AddTransient<IDataAccessLayer, FlightListDal>();
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.

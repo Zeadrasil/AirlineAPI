@@ -3,12 +3,12 @@ namespace AirlineAPI.Interfaces
 {
     public interface IDataAccessLayer
     {
-        IEnumerable<Flight> GetMovies();
+        IEnumerable<Flight> GetFlights(string userId);
 
-        void AddFlight(Flight Flight);
-        void RemoveFlight(int? id);
+        void AddFlight(Flight flight);
+        bool RemoveFlight(Flight flight);
 
-        Flight? GetFlight(int? id);
+        Flight? GetFlight(int id);
 
 		//void UpdateFlight(Flight Flight);
 		List<Flight> searchFlights(DateOnly leaveAfter, DateOnly leaveBefore,
