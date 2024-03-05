@@ -78,29 +78,27 @@ namespace AirlineAPI.Controllers
         {
             try
             {
-                // Convert leaveAfterDate and leaveBeforeDate to DateOnly
+                
                 DateOnly leaveAfter = DateOnly.FromDateTime(leaveAfterDate);
                 DateOnly leaveBefore = DateOnly.FromDateTime(leaveBeforeDate);
 
-                // Call APIAccessor to get flights
                 var flights = await APIAccessor.getFlights(leaveAfter, leaveBefore, departureIATA, arrivalIATA);
 
-                // Check if flights were found
                 if (flights != null && flights.Any())
                 {
-                    // Pass the flights to the view
-                    return View(flights);
+                    
+                    return View(flights); // maybe issue?
                 }
                 else
                 {
-                    // Handle case where no flights were found
+                    
                     TempData["ErrorMessage"] = "No flights found for the specified criteria.";
                     return View();
                 }
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that occurred during the API call
+                
                 TempData["ErrorMessage"] = "An error occurred while fetching flights: " + ex.Message;
                 return View();
             }
