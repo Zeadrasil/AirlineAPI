@@ -74,20 +74,38 @@ namespace AirlineAPI.Controllers
         }
 
         // this might work idk
-        public async Task<IActionResult> ListFlights()
+        public async Task<IActionResult> ListFlights(string departureIATA, string arrivalIATA, DateTime leaveAfterDate, DateTime leaveBeforeDate)
         {
-            DateOnly leaveAfter = DateOnly.FromDateTime(DateTime.UtcNow);
-            DateOnly leaveBefore = leaveAfter.AddDays(7);
+            try
+            {
+                // Convert leaveAfterDate and leaveBeforeDate to DateOnly
+                DateOnly leaveAfter = DateOnly.FromDateTime(leaveAfterDate);
+                DateOnly leaveBefore = DateOnly.FromDateTime(leaveBeforeDate);
 
-            string departureIATA = "JFK";
-            string arrivalIATA = "LAX";
+                // Call APIAccessor to get flights
+                var flights = await APIAccessor.getFlights(leaveAfter, leaveBefore, departureIATA, arrivalIATA);
 
-            // Call APIAccessor to get flights
-            var flights = await APIAccessor.getFlights(leaveAfter, leaveBefore, departureIATA, arrivalIATA);
-
-            // Pass the flights to the view
-            return View(flights); // Return the result of the action
+                // Check if flights were found
+                if (flights != null && flights.Any())
+                {
+                    // Pass the flights to the view
+                    return View(flights);
+                }
+                else
+                {
+                    // Handle case where no flights were found
+                    TempData["ErrorMessage"] = "No flights found for the specified criteria.";
+                    return View();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that occurred during the API call
+                TempData["ErrorMessage"] = "An error occurred while fetching flights: " + ex.Message;
+                return View();
+            }
         }
+
 
 
 
