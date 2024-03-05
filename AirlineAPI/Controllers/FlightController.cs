@@ -12,6 +12,8 @@ namespace AirlineAPI.Controllers
     {
         IDataAccessLayer dal;
 
+        
+
         private ApplicationDbContext db;
 
         public FlightController(IDataAccessLayer indal)
@@ -25,61 +27,61 @@ namespace AirlineAPI.Controllers
 
         public IActionResult AddFlight()
         {
-            List<Flight> lstFlight = dal.Airlines();
-            ViewBag.Flight = new SelectList(lstFlight, "Id", "Title");
+            List<Airline> lstFlight = dal.GetFlight();
+            ViewBag.Airline = new SelectList(lstFlight, "Id", "Title");
             return View();
 
-            
+
         }
 
-        public IActionResult GetFlight(int? Id)
-        {
-            
-                if (Id == null)
-                {
-                    return BadRequest(); 
-                }
-
-                
-                Flight foundFlight = db.Airlines.FirstOrDefault(f => f.Id == Id);
-
-                if (foundFlight == null)
-                {
-                    return NotFound(); 
-                }
-
-                return View(foundFlight); 
-            
-        }
-
-        public IActionResult GetReservedFlight(int? id, int? FlightNumber)
-        {
-            
-            return View(Flight);
-        }
-
-        public IActionResult SearchFlight(int FlightNumber)
+        public IActionResult GetFlight(string? Title)
         {
 
-            if (string.IsNullOrEmpty(Airline))
+            if (Title == null)
             {
-                return View("ReservedFlight", dal.FlightNumber);
+                return BadRequest();
             }
-            return View("ReservedFlight", dal.GetReservedFlight().Where(x => x.FlightNumber));
+
+
+            Airline? foundFlight = db.Airlines.FirstOrDefault(f => f.Title == Title);
+
+            if (foundFlight == null)
+            {
+                return NotFound();
+            }
+
+            return View(foundFlight);
+
         }
-        public IActionResult CancelFlight(int? Id)
+
+        public IActionResult GetReservedFlight(string? Title, string? CountryISO)
         {
-            dal.RemoveMovie(Id);
+
+            return View(Title, CountryISO);
+        }
+
+        public IActionResult SearchFlight(string Title)
+        {
+
+            if (string.IsNullOrEmpty(Title))
+            {
+                return View("ReservedFlight", dal.AddFlight);
+            }
+            return View("ReservedFlight", dal.GetFlight().Where(x => x.Title));
+        }
+        public IActionResult CancelFlight(string? Title)
+        {
+            dal.CancelFlight(Title);
             TempData["success"] = "Flight removed!";
             return RedirectToAction("ReservedFlight", "Flight");
 
         }
 
-        
-            
-        
 
-        public IActionResult deleteFlight() 
+
+
+
+        public IActionResult deleteFlight()
         {
             return View();
         }

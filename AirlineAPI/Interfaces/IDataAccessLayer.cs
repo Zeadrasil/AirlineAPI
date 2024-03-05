@@ -10,6 +10,11 @@ namespace AirlineAPI.Interfaces
 
         Flight? GetFlight(int? id);
 
-        //void UpdateFlight(Flight Flight);
-    }
+		//void UpdateFlight(Flight Flight);
+		List<Flight> searchFlights(DateOnly leaveAfter, DateOnly leaveBefore,
+			string? departureIATA = null, string? arrivalIATA = null,
+			DateOnly? arriveAfter = null, DateOnly? arriveBefore = null,
+			string? airlineIATA = null, string? aircraftIATA = null);
+
+	}
 }
