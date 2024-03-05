@@ -8,56 +8,53 @@ namespace AirlineAPI.Data
 	public class APIAccessor
 	{
 		static HttpClient client = new HttpClient();
-		static string[] apiKeys = new string[1]
+		static string[] apiKeys = new string[2]
 		{
-			"example"
-		};
-        public static async Task<List<Flight>?> getFlights(DateOnly leaveAfter, DateOnly leaveBefore,
-            string departureIATA, string arrivalIATA, DateOnly? arriveAfter = null, DateOnly? arriveBefore = null,
-            string? airlineIATA = null, int flightNumber = 0, string? aircraftIATA = null)
-        {
-            List<Flight> flights = new List<Flight>();
-            do
-            {
-                do
-                {
-                    int attempts = 0;
-                    HttpResponseMessage response = null;
-                    do
-                    {
-                        string address = "https://api.aviationstack.com/v1/flights?access_key=" + getKey();
-                        address += "&dep_iata=" + departureIATA;
-                        address += "&arr_iata=" + arrivalIATA;
-                        address += !string.IsNullOrEmpty(airlineIATA) ? "&airline_iata=" + airlineIATA : "";
-                        address += flightNumber > 0 ? "&flight_number=" + flightNumber : "";
-                        address += arriveAfter != null ? "&arr_scheduled_time_arr=" + arriveAfter?.ToString("yyyy-MM-dd") : "";
-                        address += "&arr_scheduled_time_dep=" + leaveAfter.ToString("yyyy-MM-dd");
-                        response = await client.GetAsync(address);
-                        attempts++;
-                    }
-                    while (!response.IsSuccessStatusCode && attempts < 50);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string result = await response.Content.ReadAsStringAsync();
-                        flights.AddRange(parseFlight(result));
-
-                        // Parse aircraft types
-                        List<AircraftType> aircraftTypes = parseAircraftType(result);
-                        
-                    }
-                    arriveAfter?.AddDays(1);
-                }
-                while (arriveAfter != null && arriveBefore != null && arriveAfter < arriveBefore);
-                leaveAfter.AddDays(1);
-            }
-            while (leaveAfter < leaveBefore);
-            return flights;
-        }
-
-
-
-
-        private static string getKey()
+            "7262242315e863414a9556d7ab07e38c",
+            "45fdbfb430491e231a1b2635e478b30b"
+        };
+		public static async Task<List<Flight>?> getFlights(DateOnly leaveAfter, DateOnly leaveBefore, 
+			string departureIATA, string arrivalIATA, DateOnly? arriveAfter = null, DateOnly? arriveBefore = null,
+			string? airlineIATA = null, int flightNumber = 0, string? aircraftIATA = null)
+		{
+			List<Flight> flights = new List<Flight>();
+			if(string.IsNullOrEmpty(departureIATA) || string.IsNullOrEmpty(arrivalIATA))
+			{
+				return flights;
+			}
+			do
+			{
+				do
+				{
+					int attempts = 0;
+					HttpResponseMessage response = null;
+					do
+					{
+						string address = "http://api.aviationstack.com/v1/flights?access_key=" + getKey();
+						address += "&dep_iata=" + departureIATA;
+						address += "&arr_iata=" + arrivalIATA;
+						address += !string.IsNullOrEmpty(airlineIATA) ? "&airline_iata=" + airlineIATA : "";
+						address += flightNumber > 0 ? "&flight_number=" + flightNumber : "";
+						//address += arriveAfter != null ? "&arr_scheduled_time_arr=" + arriveAfter?.ToString("yyyy-MM-dd") : "";
+						//address += "&arr_scheduled_time_dep=" + leaveAfter.ToString("yyyy-MM-dd");
+						response = await client.GetAsync(address);
+						attempts++;
+					}
+					while (!response.IsSuccessStatusCode && attempts < 50);
+					if (response.IsSuccessStatusCode)
+					{
+						string result = await response.Content.ReadAsStringAsync();
+						flights.AddRange(parseFlight(result));
+					}
+					arriveAfter?.AddDays(1);
+				}
+				while (arriveAfter != null && arriveBefore != null && arriveAfter < arriveBefore && false);
+				leaveAfter.AddDays(1);
+			}
+			while (leaveAfter < leaveBefore && false);
+			return flights;
+		}
+		private static string getKey()
 		{
 			return apiKeys[new Random().Next(apiKeys.Length)];
 		}

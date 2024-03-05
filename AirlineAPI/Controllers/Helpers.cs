@@ -20,5 +20,14 @@
 			}
 			return dt;
 		}
+		public static DateOnly getDateFromString(string str)
+		{
+			string[] times = str.Split('-');
+			DateOnly dt = new DateOnly();
+            dt = dt.AddYears(int.Parse(times[0]) - 1);
+            dt = dt.AddMonths(int.Parse(times[1]) - 1);
+            dt = dt.AddDays(int.Parse(times[2]) - 1);
+			return dt;
+        }
 	}
 }

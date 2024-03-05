@@ -29,7 +29,7 @@ namespace AirlineAPI.Models
 		public DateTime ScheduledArrival { get; set; }
 		public DateTime? EstimatedArrival { get; set; }
 		[Required]
-		public int ReserverID {  get; set; }
+		public string? ReserverID {  get; set; }
 		[Required]
 		public string DepartureGate { get; set; }
 		public string? ArrivalGate { get; set; }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using AirlineAPI.Interfaces;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using AirlineAPI.Data;
+using System.Security.Claims;
 
 namespace AirlineAPI.Controllers
 {
@@ -25,14 +26,6 @@ namespace AirlineAPI.Controllers
             return View();
         }
 
-        public IActionResult AddFlight()
-        {
-            List<Airline> lstFlight = dal.GetFlight();
-            ViewBag.Airline = new SelectList(lstFlight, "Id", "Title");
-            return View();
-
-
-        }
 
         public IActionResult GetFlight(string? Title)
         {
@@ -67,11 +60,12 @@ namespace AirlineAPI.Controllers
             {
                 return View("ReservedFlight", dal.AddFlight);
             }
-            return View("ReservedFlight", dal.GetFlight().Where(x => x.Title));
+            //return View("ReservedFlight", dal.GetFlight().Where(x => x.Title));
+            return View();
         }
         public IActionResult CancelFlight(string? Title)
         {
-            dal.CancelFlight(Title);
+            //dal.CancelFlight(Title);
             TempData["success"] = "Flight removed!";
             return RedirectToAction("ReservedFlight", "Flight");
 
