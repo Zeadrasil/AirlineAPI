@@ -2,19 +2,17 @@
 
 <h1>Search Flights</h1>
 
-<h3 class="flight-count">Total Flights: @Model.Count()</h3>
-
 @if (Model == null || Model.Count() == 0)
 {
     <h2>No flights currently, check back later!</h2>
 }
-
 else
 {
+    <h3 class="flight-count">Total Flights: @Model.Count()</h3>
     <form class="d-flex search" asp-controller="Home" asp-action="Search" method="post">
-    <input name="key" class="form-control me-2" type="search" placeholder="Search" />
-    <button class="btn btn-secondary" type="submit">Search</button>
-</form>
+        <input name="key" class="form-control me-2" type="search" placeholder="Search" />
+        <button class="btn btn-secondary" type="submit">Search</button>
+    </form>
     @foreach (Flight flight in Model)
     {
         <div class="flight">

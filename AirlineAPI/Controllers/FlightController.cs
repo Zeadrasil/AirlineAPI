@@ -27,23 +27,23 @@ namespace AirlineAPI.Controllers
 
         public IActionResult AddFlight()
         {
-            List<Airline> lstFlight = dal.GetFlight();
-            ViewBag.Airline = new SelectList(lstFlight, "Id", "Title");
+            List<Flight> lstFlight = dal.GetFlight();
+            ViewBag.Flight = new SelectList(lstFlight, "Id", "Title");
             return View();
 
 
         }
 
-        public IActionResult GetFlight(string? Title)
+        public IActionResult GetFlight(int? flightNumber)
         {
 
-            if (Title == null)
+            if (flightNumber == null)
             {
                 return BadRequest();
             }
 
 
-            Airline? foundFlight = db.Airlines.FirstOrDefault(f => f.Title == Title);
+            Flight? foundFlight = db.Flights.FirstOrDefault(f => f.FlightNumber == flightNumber);
 
             if (foundFlight == null)
             {
@@ -54,21 +54,27 @@ namespace AirlineAPI.Controllers
 
         }
 
-        public IActionResult GetReservedFlight(string? Title, string? CountryISO)
+        public IActionResult GetReservedFlight(int? FlightNumber, string? Status)
         {
-
-            return View(Title, CountryISO);
+            Flight flight = dal.GetFlightByFlightNumber(FlightNumber.Value);
+            
+            return View(flight);
         }
 
-        public IActionResult SearchFlight(string Title)
+        public IActionResult SearchFlight(int? FlightNumber)
         {
 
-            if (string.IsNullOrEmpty(Title))
+            if (FlightNumber != null )
             {
-                return View("ReservedFlight", dal.AddFlight);
+                return View("ReservedFlight", dal.GetFlightByFlightNumber(FlightNumber.Value));
             }
-            return View("ReservedFlight", dal.GetFlight().Where(x => x.Title));
+            else
+            {
+                return BadRequest("Nothing found");
+            }
+            
         }
+
         public IActionResult CancelFlight(int? id)
         {
             dal.RemoveFlight(id);

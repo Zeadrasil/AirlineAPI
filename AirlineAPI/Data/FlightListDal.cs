@@ -9,75 +9,85 @@ namespace AirlineAPI.Data
     public class FlightListDal : IDataAccessLayer
     {
         private ApplicationDbContext db;
-        List<Airline> Airlines;
+        //List<Airline> Airlines;
         public FlightListDal (ApplicationDbContext indb)
         {
             db = indb;
         }
 
-        public void AddFlight(Airline airline)
+        public void AddFlight(Flight flight)
         {
-            //MovieList.Add(movie);
-            db.Airlines.Add(airline);
+            db.Flights.Add(flight);
             db.SaveChanges();
         }
 
-        public Airline? GetFlight(string? Title)
+        public Flight? GetFlight(int? id)
         {
             //Movie? foundMovie = MovieList.Where(movie => movie.Id == id).FirstOrDefault();
-            Airline? foundAirline = db.Airlines.Where(airline => airline.Title == Title).FirstOrDefault();
-            return foundAirline;
+            Flight? foundFlight = db.Flights.FirstOrDefault(f => f.Id == id);
+            return foundFlight;
         }
 
-        public IEnumerable<Airline> GetFlight()
+        public List<Flight> GetFlight()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Flight? GetFlightByFlightNumber(int FlightNumber)
+        {
+            return db.Flights.FirstOrDefault(f => f.FlightNumber == FlightNumber);
+        }
+
+        public IEnumerable<Flight> GetFlights()
         {
             //return MovieList;
-            return db.Airlines;
+            return db.Flights;
         }
 
-        public void CancelFlight(string? title)
+        //public void CancelFlight(string? title)
+        //{
+        //    Airline? foundAirlines = GetFlight(title);
+        //    if (foundAirlines != null)
+        //    {
+        //        //MovieList.Remove(foundMovie);
+        //        db.Airlines.Remove(foundAirlines);
+        //        db.SaveChanges();
+        //    }
+        //}
+
+
+        //public List<Airline> FilterFlights(string? title, string? countryiso)
+        //{
+        //    // Check for null inputs and handle empty string case
+        //    title ??= string.Empty;
+        //    countryiso ??= string.Empty;
+
+        //    // Get all flights if both title and countryiso are empty
+        //    if (string.IsNullOrEmpty(title) && string.IsNullOrEmpty(countryiso))
+        //        return GetFlight().ToList();
+
+        //    // Get all flights
+        //    var allFlights = GetFlight();
+
+        //    // Filter flights by title
+        //    var flightsByTitle = allFlights.Where(m => !string.IsNullOrEmpty(m.Title) && m.Title.ToLower().Contains(title.ToLower()));
+
+        //    // Filter flights by country ISO
+        //    var flightsByCountryISO = allFlights.Where(m => !string.IsNullOrEmpty(m.CountryISO) && m.CountryISO.ToLower().Contains(countryiso.ToLower()));
+
+        //    // Return flights that match both conditions
+        //    return flightsByTitle.Intersect(flightsByCountryISO).ToList();
+        //}
+
+        public void RemoveFlight(int? id)
         {
-            Airline? foundAirlines = GetFlight(title);
-            if (foundAirlines != null)
-            {
-                //MovieList.Remove(foundMovie);
-                db.Airlines.Remove(foundAirlines);
-                db.SaveChanges();
-            }
+            db.Flights.Remove(GetFlight(id));
+            db.SaveChanges();
         }
 
-
-        public List<Airline> FilterFlights(string? title, string? countryiso)
+        public List<Flight> searchFlights(DateOnly leaveAfter, DateOnly leaveBefore, string? departureIATA = null, string? arrivalIATA = null, DateOnly? arriveAfter = null, DateOnly? arriveBefore = null, string? airlineIATA = null, string? aircraftIATA = null)
         {
-            // Check for null inputs and handle empty string case
-            title ??= string.Empty;
-            countryiso ??= string.Empty;
-
-            // Get all flights if both title and countryiso are empty
-            if (string.IsNullOrEmpty(title) && string.IsNullOrEmpty(countryiso))
-                return GetFlight().ToList();
-
-            // Get all flights
-            var allFlights = GetFlight();
-
-            // Filter flights by title
-            var flightsByTitle = allFlights.Where(m => !string.IsNullOrEmpty(m.Title) && m.Title.ToLower().Contains(title.ToLower()));
-
-            // Filter flights by country ISO
-            var flightsByCountryISO = allFlights.Where(m => !string.IsNullOrEmpty(m.CountryISO) && m.CountryISO.ToLower().Contains(countryiso.ToLower()));
-
-            // Return flights that match both conditions
-            return flightsByTitle.Intersect(flightsByCountryISO).ToList();
-        }
-
-        List<Airline> IDataAccessLayer.GetFlight()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Airline> FilterAirlines(string? title, string? countryiso)
-        {
-            throw new NotImplementedException();
+            return db.Flights.Where(f => f.DepartureIATA.Equals(departureIATA) || f.ArrivalIATA.Equals(arrivalIATA) || f.AirlineIATA.Equals(airlineIATA)).ToList();
         }
     }
 }
