@@ -4,6 +4,7 @@ using AirlineAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Security.Claims;
 
@@ -62,7 +63,7 @@ namespace AirlineAPI.Controllers
                 string.IsNullOrEmpty(arriveAfter) ? null : Helpers.getDateFromString(arriveAfter),
                 string.IsNullOrEmpty(arriveBefore) ? null : Helpers.getDateFromString(arriveBefore),
                 airlineIATA, aircraftIATA);
-            TempData["results"] = flights.ToArray();
+            TempData["results"] = JsonConvert.SerializeObject(flights.ToArray());
             return View("SearchResults", flights);
         }
         [Authorize]
@@ -74,7 +75,7 @@ namespace AirlineAPI.Controllers
         public IActionResult AddFlight(Flight addedFlight)
         {
             List<Flight> flights = new List<Flight>();
-            flights.AddRange(TempData["results"] as Flight[]);
+            flights.AddRange(JsonConvert.DeserializeObject<Flight[]>(TempData["results"] as string));
             int index = flights.IndexOf(addedFlight);
             addedFlight.ReserverID = User.FindFirstValue(ClaimTypes.NameIdentifier);
             dal.AddFlight(addedFlight);
