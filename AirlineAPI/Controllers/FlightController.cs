@@ -12,14 +12,16 @@ namespace AirlineAPI.Controllers
     public class FlightController : Controller
     {
         IDataAccessLayer dal;
+        private readonly APIAccessor apiAccessor;
 
         
 
         private ApplicationDbContext db;
 
-        public FlightController(IDataAccessLayer indal)
+        public FlightController(IDataAccessLayer indal, APIAccessor apiAccessor)
         {
             dal = indal;
+            this.apiAccessor = apiAccessor;
         }
         public IActionResult Index()
         {
@@ -71,7 +73,21 @@ namespace AirlineAPI.Controllers
 
         }
 
+        // this might work idk
+        public async Task<IActionResult> ListFlights()
+        {
+            DateOnly leaveAfter = DateOnly.FromDateTime(DateTime.UtcNow);
+            DateOnly leaveBefore = leaveAfter.AddDays(7);
 
+            string departureIATA = "JFK";
+            string arrivalIATA = "LAX";
+
+            // Call APIAccessor to get flights
+            var flights = await APIAccessor.getFlights(leaveAfter, leaveBefore, departureIATA, arrivalIATA);
+
+            // Pass the flights to the view
+            return View(flights); // Return the result of the action
+        }
 
 
 

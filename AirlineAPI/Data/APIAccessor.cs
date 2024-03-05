@@ -54,6 +54,8 @@ namespace AirlineAPI.Data
 			while (leaveAfter < leaveBefore && false);
 			return flights;
 		}
+
+
 		private static string getKey()
 		{
 			return apiKeys[new Random().Next(apiKeys.Length)];
