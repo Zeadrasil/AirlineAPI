@@ -23,7 +23,7 @@ namespace AirlineAPI
 			builder.Services.AddTransient<IDataAccessLayer, FlightListDal>();
 
 			builder.Services.AddControllersWithViews();
-
+			builder.Services.AddTransient<IDataAccessLayer, FlightListDal>();
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.

@@ -1,8 +1,12 @@
 ﻿using AirlineAPI.Data;
 using AirlineAPI.Interfaces;
 using AirlineAPI.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace AirlineAPI.Controllers
 {
@@ -25,12 +29,13 @@ namespace AirlineAPI.Controllers
         {
             return View();
         }
-
+        [Authorize]
         public IActionResult Search()
         {
             return View();
         }
 
+        [Authorize]
         public IActionResult ReservationPage()
         {
             return View();
@@ -47,16 +52,36 @@ namespace AirlineAPI.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult SearchResults(string leaveAfter, string leaveBefore, 
+        [Authorize]
+        public IActionResult FindResults(string leaveAfter, string leaveBefore, 
             string? departureIATA = null, string? arrivalIATA = null, 
             string? arriveAfter = null, string? arriveBefore = null, 
             string? airlineIATA = null, string? aircraftIATA = null)
         {
-            return View(dal.searchFlights(DateOnly.FromDateTime(Helpers.getDateTimeFromString(leaveAfter)), 
-                DateOnly.FromDateTime(Helpers.getDateTimeFromString(leaveBefore)), departureIATA, arrivalIATA, 
-                string.IsNullOrEmpty(arriveAfter) ? null : DateOnly.FromDateTime(Helpers.getDateTimeFromString(arriveAfter)),
-                string.IsNullOrEmpty(arriveBefore) ? null : DateOnly.FromDateTime(Helpers.getDateTimeFromString(arriveBefore)), airlineIATA, aircraftIATA));
+            List<Flight> flights = dal.searchFlights(Helpers.getDateFromString(leaveAfter),
+                Helpers.getDateFromString(leaveBefore), departureIATA, arrivalIATA,
+                string.IsNullOrEmpty(arriveAfter) ? null : Helpers.getDateFromString(arriveAfter),
+                string.IsNullOrEmpty(arriveBefore) ? null : Helpers.getDateFromString(arriveBefore),
+                airlineIATA, aircraftIATA);
+            TempData["results"] = JsonConvert.SerializeObject(flights.ToArray());
+            return View("SearchResults", flights);
         }
-
+        [Authorize]
+        public IActionResult SearchResults(List<Flight> results)
+        {
+            return View(results);
+        }
+        [Authorize]
+        public IActionResult AddFlight(int addedFlight)
+        {
+            Flight flight = dal.GetFlight(addedFlight);
+            List<Flight> flights = new List<Flight>();
+            flights.AddRange(JsonConvert.DeserializeObject<Flight[]>(TempData["results"] as string));
+            int index = flights.IndexOf(flight);
+            flight.ReserverID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            dal.AddFlight(flight);
+            flights[index] = flight;
+            return View("SearchResults", flights);
+        }
     }
 }
