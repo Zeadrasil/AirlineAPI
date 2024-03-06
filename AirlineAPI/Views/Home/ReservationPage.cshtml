@@ -1,40 +1,43 @@
 ﻿@model AirportsAndAirlines
 <h1>Find a flight to reserve!</h1>
+@if (Model != null)
+{
+    <form asp-action="SearchResults" asp-controller="Home">
+        <div class="border p-3 mt-4">
+            <div class="row pb-2">
+                <label for="Leave After">Departure Start Range:</label>
+                <input id="leaveAfter" type="date" name="leaveAfter" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            </div>
+            <div class="row pb-2">
+                <label for="Leave Before">Departure End Range:</label>
+                <input id="leaveBefore" type="date" name="leaveBefore" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            </div>
+            <div class="row pb-2">
+                <label for="Arrive After">Arrival Start Range:</label>
+                <input id="arriveAfter" type="date" name="arriveAfter" value="" />
+            </div>
+            <div class="row pb-2">
+                <label for="Arrive Before">Arrival End Range:</label>
+                <input id="arriveBefore" type="date" name="arriveBefore" value="" />
+            </div>
+            <div class="row pb-2">
+                <label for="DepartureAirport">Departure Airport:</label>
+                <select class="form-control"></select>
+            </div>
+        </div>
+    </form>
+    <script>
+        $(document).ready(function () {
+            $('.selectbox').select2();
+        });
+        var data = $.map(@Model.Airports.ToArray(), function (obj) {
+            obj.id = obj.id || obj.IATACode;
+            obj.text = obj.text || obj.Name;
+            return obj;
+        });
+        $(".selectbox").select2({
+            data: data
+        })
 
-<form asp-action="FindResults" asp-controller="Home">
-	<div class="border p-3 mt-4">
-		<div class="row pb-2">
-			<label for="Leave After">Departure Start Range:</label>
-			<input id="leaveAfter" type="date" name="leaveAfter" value="@DateTime.Now.ToString("yyyy-MM-dd")"/>
-		</div>
-		<div class="row pb-2">
-			<label for="Leave Before">Departure End Range:</label>
-			<input id="leaveBefore" type="date" name="leaveBefore" value="@DateTime.Now.ToString("yyyy-MM-dd")"/>
-		</div>
-		<div class="row pb-2">
-			<label for="arrive After">Arrival Start Range:</label>
-			<input id="arriveAfter" type="date" name="arriveAfter" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-		</div>
-		<div class="row pb-2">
-			<label for="arrive Before">Arrival End Range:</label>
-			<input id="arriveBefore" type="date" name="arriveBefore" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-		</div>
-		<div class="row pb-2">
-			<label for="DepartureAirport">Departure Airport:</label>
-			<input id="departureIATA" type="search" name="departureIATA" value="" />
-		</div>
-		<div class="row pb-2">
-			<label for="arrivalAirport">Arrival Airport:</label>
-			<input id="arrivalIATA" type="search" name="arrivalIATA" value="" />
-		</div>
-		<div class="row pb-2">
-			<label for="airline">Airline:</label>
-			<input id="airlineIATA" type="search" name="airlineIATA" value="" />
-		</div>
-		<div class="row pb-2">
-			<label for="aircraftIATA">Aircraft Type:</label>
-			<input id="aircraftIATA" type="search" name="aircraftIATA" value="" />
-		</div>
-		<button type="submit" class="btn btn-primary">Search for Flights</button>
-	</div>
-</form>
+    </script>
+}

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using AirlineAPI.Interfaces;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using AirlineAPI.Data;
-using System.Security.Claims;
 
 namespace AirlineAPI.Controllers
 {
@@ -26,17 +25,25 @@ namespace AirlineAPI.Controllers
             return View();
         }
 
+        public IActionResult AddFlight()
+        {
+            List<Flight> lstFlight = dal.GetFlight();
+            ViewBag.Flight = new SelectList(lstFlight, "Id", "Title");
+            return View();
 
-        public IActionResult GetFlight(string? Title)
+
+        }
+
+        public IActionResult GetFlight(int? flightNumber)
         {
 
-            if (Title == null)
+            if (flightNumber == null)
             {
                 return BadRequest();
             }
 
 
-            Airline? foundFlight = db.Airlines.FirstOrDefault(f => f.Title == Title);
+            Flight? foundFlight = db.Flights.FirstOrDefault(f => f.FlightNumber == flightNumber);
 
             if (foundFlight == null)
             {
@@ -47,60 +54,35 @@ namespace AirlineAPI.Controllers
 
         }
 
-        public IActionResult GetReservedFlight(string? Title, string? CountryISO)
+        public IActionResult GetReservedFlight(int? FlightNumber, string? Status)
         {
-
-            return View(Title, CountryISO);
+            Flight flight = dal.GetFlightByFlightNumber(FlightNumber.Value);
+            
+            return View(flight);
         }
 
-        public IActionResult SearchFlight(string Title)
+        public IActionResult SearchFlight(int? FlightNumber)
         {
 
-            if (string.IsNullOrEmpty(Title))
+            if (FlightNumber != null )
             {
-                return View("ReservedFlight", dal.AddFlight);
+                return View("ReservedFlight", dal.GetFlightByFlightNumber(FlightNumber.Value));
             }
-            //return View("ReservedFlight", dal.GetFlight().Where(x => x.Title));
-            return View();
+            else
+            {
+                return BadRequest("Nothing found");
+            }
+            
         }
+
         public IActionResult CancelFlight(int? id)
         {
-            //dal.CancelFlight(Title);
+            dal.RemoveFlight(id);
             TempData["success"] = "Flight removed!";
             return RedirectToAction("ReservedFlight", "Flight");
 
         }
-
-        // this might work idk
-        public async Task<IActionResult> ListFlights(string departureIATA, string arrivalIATA, DateTime leaveAfterDate, DateTime leaveBeforeDate)
-        {
-            try
-            {
-                
-                DateOnly leaveAfter = DateOnly.FromDateTime(leaveAfterDate);
-                DateOnly leaveBefore = DateOnly.FromDateTime(leaveBeforeDate);
-
-                var flights = await APIAccessor.getFlights(leaveAfter, leaveBefore, departureIATA, arrivalIATA);
-
-                if (flights != null && flights.Any())
-                {
-                    
-                    return View(flights); // maybe issue?
-                }
-                else
-                {
-                    
-                    TempData["ErrorMessage"] = "No flights found for the specified criteria.";
-                    return View();
-                }
-            }
-            catch (Exception ex)
-            {
-                
-                TempData["ErrorMessage"] = "An error occurred while fetching flights: " + ex.Message;
-                return View();
-            }
-        }
+        
 
 
 
