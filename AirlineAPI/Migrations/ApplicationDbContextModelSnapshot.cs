@@ -4,18 +4,16 @@ using AirlineAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace AirlineAPI.Data.Migrations
+namespace AirlineAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240221235721_Add Flight Table")]
-    partial class AddFlightTable
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,7 +114,8 @@ namespace AirlineAPI.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DeliveryDate")
+                    b.Property<DateTime?>("DeliveryDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("EngineCount")
@@ -126,11 +125,13 @@ namespace AirlineAPI.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("FirstFlight")
+                    b.Property<DateTime?>("FirstFlight")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ICAOHex")
-                        .HasColumnType("int");
+                    b.Property<string>("ICAOHex")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ModelCode")
                         .IsRequired()
@@ -149,10 +150,12 @@ namespace AirlineAPI.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("RegistrationDate")
+                    b.Property<DateTime?>("RegistrationDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("RolloutDate")
+                    b.Property<DateTime?>("RolloutDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ShortIATACode")
@@ -181,7 +184,6 @@ namespace AirlineAPI.Data.Migrations
                         .HasColumnType("nvarchar(3)");
 
                     b.Property<string>("CityIATA")
-                        .IsRequired()
                         .HasMaxLength(3)
                         .HasColumnType("nvarchar(3)");
 
@@ -256,8 +258,9 @@ namespace AirlineAPI.Data.Migrations
                     b.Property<int>("FlightNumber")
                         .HasColumnType("int");
 
-                    b.Property<int>("ReserverID")
-                        .HasColumnType("int");
+                    b.Property<string>("ReserverID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ScheduledArrival")
                         .HasColumnType("datetime2");
