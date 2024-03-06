@@ -12,7 +12,7 @@ namespace AirlineAPI.Controllers
 {
     public class HomeController : Controller
     {
-        private List<Flight> flightHolder = new List<Flight>();
+        private static List<Flight> flightHolder = new List<Flight>();
         private readonly ILogger<HomeController> _logger;
         IDataAccessLayer dal;
         public HomeController(ILogger<HomeController> logger, IDataAccessLayer indal)
@@ -33,7 +33,7 @@ namespace AirlineAPI.Controllers
         [Authorize]
         public IActionResult Search()
         {
-            return View();
+            return View(dal.GetFlights(User.FindFirstValue(ClaimTypes.NameIdentifier)));
         }
 
         [Authorize]
@@ -59,7 +59,7 @@ namespace AirlineAPI.Controllers
             string? arriveAfter = null, string? arriveBefore = null, 
             string? airlineIATA = null, string? aircraftIATA = null)
         {
-            List<Flight> flights = dal.searchFlights(Helpers.getDateFromString(leaveAfter),
+            List<Flight> flights = dal.findFlights(Helpers.getDateFromString(leaveAfter),
                 Helpers.getDateFromString(leaveBefore), departureIATA, arrivalIATA,
                 string.IsNullOrEmpty(arriveAfter) ? null : Helpers.getDateFromString(arriveAfter),
                 string.IsNullOrEmpty(arriveBefore) ? null : Helpers.getDateFromString(arriveBefore),
@@ -73,15 +73,20 @@ namespace AirlineAPI.Controllers
             return View(results);
         }
         [Authorize]
-        public IActionResult AddFlight(Flight addedFlight)
+        public IActionResult AddFlight(string addedFlight)
         {
+            Flight flight = JsonConvert.DeserializeObject<Flight>(addedFlight);
             List<Flight> flights = flightHolder;
-            int index = flights.IndexOf(addedFlight);
-            addedFlight.ReserverID = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            dal.AddFlight(addedFlight);
+            int index = flights.IndexOf(flights.Where(f => f.EstimatedDeparture == flight.EstimatedDeparture && f.FlightNumber == flight.FlightNumber && f.AirlineIATA == flight.AirlineIATA).FirstOrDefault());
+            flight.ReserverID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            dal.AddFlight(flight);
             flightHolder = flights;
-            flights[index] = addedFlight;
+            flights[index] = flight;
             return View("SearchResults", flights);
+        }
+        public IActionResult ViewAirline(string airline)
+        {
+            Airline? line = dal.getAirline(airline);
         }
     }
 }

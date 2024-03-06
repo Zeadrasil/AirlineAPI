@@ -9,29 +9,32 @@ else
 {
     <div class="flight-container col-6">
         <div class="info">
+            @*<a class="btn btn-secondary" asp-controller="Home" asp-action="ViewAirline" asp-route-airline="@Model.AirlineIATA">*@
+                <h3>Airline: @Model.AirlineIATA</h3>
+            @*</a>*@
             <h3>Flight Number: @Model.FlightNumber</h3>
             <h3>Departure Airport: @Model.DepartureIATA</h3>
             <h3>Arrival Airport: @Model.ArrivalIATA</h3>
-            <h3>Scheduled Departure: @Model.ScheduledDeparture.ToString("M/d/yyyy hh:mm tt")</h3>
             <h3>Departure Terminal: @Model.DepartureTerminal</h3>
             @if (!string.IsNullOrEmpty(Model.ArrivalTerminal))
             {
                 <h3>Arrival Terminal: @Model.ArrivalTerminal</h3>
             }
             <h3>Status: @Model.Status</h3>
+            <h3>Scheduled Departure: @Model.ScheduledDeparture.ToString("M/d/yyyy hh:mm tt")</h3>
             <h3>Scheduled Arrival: @Model.ScheduledArrival.ToString("M/d/yyyy hh:mm tt")</h3>
             @if (Model.EstimatedDeparture != null)
             {
-                <h3>Estimated Departure: @Model.EstimatedDeparture.Value.ToString("M/d/yyyy hh:mm tt")</h3>
+                <h3>Estimated/Actual Departure: @Model.EstimatedDeparture.Value.ToString("M/d/yyyy hh:mm tt")</h3>
             }
             @if (Model.EstimatedArrival != null)
             {
-                <h3>Estimated Arrival: @Model.EstimatedArrival.Value.ToString("M/d/yyyy hh:mm tt")</h3>
+                <h3>Estimated/Actual Arrival: @Model.EstimatedArrival.Value.ToString("M/d/yyyy hh:mm tt")</h3>
             }
         </div>
         @if (Model.ReserverID == null)
         {
-            <a asp-controller="Home" asp-action="AddFlight" asp-route-addedFlight="@Model" class="btn btn-secondary">Reserve</a>
+            <a asp-controller="Home" asp-action="AddFlight" asp-route-addedFlight="@JsonConvert.SerializeObject(Model)" class="btn btn-secondary">Reserve</a>
         }
         else
         {

@@ -55,7 +55,7 @@ namespace AirlineAPI.Data
 			return flights;
 		}
 
-
+		//public static async Task<List<Airline>>
 		private static string getKey()
 		{
 			return apiKeys[new Random().Next(apiKeys.Length)];

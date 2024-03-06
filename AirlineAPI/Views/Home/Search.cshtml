@@ -1,10 +1,10 @@
-﻿@* @model IEnumerable<Flight>
+﻿@model IEnumerable<Flight>
 
 <h1>Search Flights</h1>
 
 @if (Model == null || Model.Count() == 0)
 {
-    <h2>No flights currently, check back later!</h2>
+    <h2>No flights currently reserved, check back later after adding some!</h2>
 }
 else
 {
@@ -20,7 +20,3 @@ else
         </div>
     }
 }
-
- *@
-
- <h1>Check Back Later!</h1>

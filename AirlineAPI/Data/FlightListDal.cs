@@ -89,5 +89,19 @@ namespace AirlineAPI.Data
         {
             return db.Flights.Where(f => f.DepartureIATA.Equals(departureIATA) || f.ArrivalIATA.Equals(arrivalIATA) || f.AirlineIATA.Equals(airlineIATA)).ToList();
         }
+        public List<Flight> findFlights(DateOnly leaveAfter, DateOnly leaveBefore, string? departureIATA = null, string? arrivalIATA = null, DateOnly? arriveAfter = null, DateOnly? arriveBefore = null, string? airlineIATA = null, string? aircraftIATA = null)
+        {
+            return APIAccessor.getFlights(leaveAfter, leaveBefore, departureIATA, arrivalIATA, arriveAfter, arriveBefore, airlineIATA, -1, aircraftIATA).Result;
+        }
+
+        public List<Flight> GetFlights(string userId)
+        {
+            return db.Flights.Where(f => f.ReserverID ==  userId).ToList();
+        }
+
+        public Airline? getAirline(string airlineIATA)
+        {
+            return db.Airlines.Where(a => a.IATACode == airlineIATA).FirstOrDefault();
+        }
     }
 }

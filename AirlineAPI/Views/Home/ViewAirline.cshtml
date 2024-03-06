@@ -1,0 +1,12 @@
+﻿@model Airline
+<h1>@Model.Title</h1>
+<h2>IATA Code: @Model.IATACode</h2>
+<h2>ICAO Code: @Model.ICAOCode</h2>
+<h3>Accounting Prefix: @Model.IATAAccounting</h3>
+<h3>Callsign: @Model.Callsign</h3>
+<h3>Airline Type: @Model.Type</h3>
+<h3>Status: @Model.Status</h3>
+<h3>Fleet Size: @Model.FleetSize</h3>
+<h3>Average Plane Age: @Model.FleetAge</h3>
+<h3>Founded: @DateOnly.FromDateTime(Model.Founded).ToString()</h3>
+<h3>Country: @Model.CountryISO</h3>
