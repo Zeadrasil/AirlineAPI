@@ -87,6 +87,14 @@ namespace AirlineAPI.Controllers
         public IActionResult ViewAirline(string airline)
         {
             Airline? line = dal.getAirline(airline);
+            if(line == null)
+            {
+                return View("Index");
+            }
+            else
+            {
+                return View(line);
+            }
         }
     }
 }
