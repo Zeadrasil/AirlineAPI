@@ -31,7 +31,7 @@ else
         </div>
         @if (Model.ReserverID == null)
         {
-            <a asp-controller="Home" asp-action="AddFlight" asp-route-addedFlight="@Model.Id" class="btn btn-secondary">Reserve</a>
+            <a asp-controller="Home" asp-action="AddFlight" asp-route-addedFlight="@Model" class="btn btn-secondary">Reserve</a>
         }
         else
         {

@@ -65,7 +65,7 @@ namespace AirlineAPI.Controllers
         }
         public IActionResult CancelFlight(int? id)
         {
-            dal.CancelFlight(Title);
+            //dal.CancelFlight(Title);
             TempData["success"] = "Flight removed!";
             return RedirectToAction("ReservedFlight", "Flight");
 

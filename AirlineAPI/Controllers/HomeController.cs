@@ -12,6 +12,7 @@ namespace AirlineAPI.Controllers
 {
     public class HomeController : Controller
     {
+        private List<Flight> flightHolder = new List<Flight>();
         private readonly ILogger<HomeController> _logger;
         IDataAccessLayer dal;
         public HomeController(ILogger<HomeController> logger, IDataAccessLayer indal)
@@ -63,7 +64,7 @@ namespace AirlineAPI.Controllers
                 string.IsNullOrEmpty(arriveAfter) ? null : Helpers.getDateFromString(arriveAfter),
                 string.IsNullOrEmpty(arriveBefore) ? null : Helpers.getDateFromString(arriveBefore),
                 airlineIATA, aircraftIATA);
-            TempData["results"] = JsonConvert.SerializeObject(flights.ToArray());
+            flightHolder = flights;
             return View("SearchResults", flights);
         }
         [Authorize]
@@ -72,15 +73,14 @@ namespace AirlineAPI.Controllers
             return View(results);
         }
         [Authorize]
-        public IActionResult AddFlight(int addedFlight)
+        public IActionResult AddFlight(Flight addedFlight)
         {
-            Flight flight = dal.GetFlight(addedFlight);
-            List<Flight> flights = new List<Flight>();
-            flights.AddRange(JsonConvert.DeserializeObject<Flight[]>(TempData["results"] as string));
-            int index = flights.IndexOf(flight);
-            flight.ReserverID = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            dal.AddFlight(flight);
-            flights[index] = flight;
+            List<Flight> flights = flightHolder;
+            int index = flights.IndexOf(addedFlight);
+            addedFlight.ReserverID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            dal.AddFlight(addedFlight);
+            flightHolder = flights;
+            flights[index] = addedFlight;
             return View("SearchResults", flights);
         }
     }
