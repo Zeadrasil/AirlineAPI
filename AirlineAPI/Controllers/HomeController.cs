@@ -72,14 +72,15 @@ namespace AirlineAPI.Controllers
             return View(results);
         }
         [Authorize]
-        public IActionResult AddFlight(Flight addedFlight)
+        public IActionResult AddFlight(int addedFlight)
         {
+            Flight flight = dal.GetFlight(addedFlight);
             List<Flight> flights = new List<Flight>();
             flights.AddRange(JsonConvert.DeserializeObject<Flight[]>(TempData["results"] as string));
-            int index = flights.IndexOf(addedFlight);
-            addedFlight.ReserverID = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            dal.AddFlight(addedFlight);
-            flights[index] = addedFlight;
+            int index = flights.IndexOf(flight);
+            flight.ReserverID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            dal.AddFlight(flight);
+            flights[index] = flight;
             return View("SearchResults", flights);
         }
     }
