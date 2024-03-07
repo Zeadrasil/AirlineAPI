@@ -31,7 +31,7 @@ namespace AirlineAPI.Controllers
             return View();
         }
         [Authorize]
-        public IActionResult Search()
+        public IActionResult CurrentReservations()
         {
             return View(dal.GetFlights(User.FindFirstValue(ClaimTypes.NameIdentifier)));
         }
