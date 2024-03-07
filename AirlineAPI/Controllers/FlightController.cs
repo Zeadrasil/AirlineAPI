@@ -79,8 +79,9 @@ namespace AirlineAPI.Controllers
         {
             dal.RemoveFlight(id);
             TempData["success"] = "Flight removed!";
-            return RedirectToAction("ReservedFlight", "Flight");
+            return RedirectToAction("ReservationPage", "Home");
 
+            
         }
         
 
